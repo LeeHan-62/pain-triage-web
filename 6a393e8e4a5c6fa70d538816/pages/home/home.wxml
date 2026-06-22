@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="hero card">
+    <view class="title">疼痛智能问诊与分诊</view>
+    <view class="subtitle">患者自助填写疼痛信息，系统自动整理结构化摘要，初步判断疼痛部位、性质与风险等级，并推荐分诊去向。</view>
+    <button class="primary-btn" bindtap="startConsult">开始疼痛问诊</button>
+  </view>
+
+  <view class="card">
+    <view class="section-title">核心流程</view>
+    <view class="flow-item">1. 采集疼痛位置、性质、时长、诱因和伴随症状</view>
+    <view class="flow-item">2. 模拟 AI 模型输出部位分类、性质分类和风险分级</view>
+    <view class="flow-item">3. 根据风险等级自动推荐急诊、优先诊室或常规队列</view>
+    <view class="flow-item">4. 将问诊结果写入本地健康档案并形成统计数据</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">风险等级</view>
+    <view class="risk-row"><text class="risk-dot red"></text>Ⅰ级：极高危，立即急诊抢救</view>
+    <view class="risk-row"><text class="risk-dot orange"></text>Ⅱ级：高危，10 分钟内优先接诊</view>
+    <view class="risk-row"><text class="risk-dot blue"></text>Ⅲ级：普通急症，当日优先处理</view>
+    <view class="risk-row"><text class="risk-dot green"></text>Ⅳ级：慢性慢病，常规排队随访</view>
+  </view>
+</view>

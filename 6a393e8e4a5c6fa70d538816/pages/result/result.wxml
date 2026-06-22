@@ -1,0 +1,47 @@
+<view class="page" wx:if="{{result}}">
+  <view class="card risk-card" style="border-left-color: {{result.risk.color}};">
+    <view class="risk-level" style="color: {{result.risk.color}};">{{result.risk.level}} {{result.risk.label}}</view>
+    <view class="risk-action">{{result.risk.action}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">模型分类结果</view>
+    <view class="result-grid">
+      <view class="result-item">
+        <view class="muted">部位分类</view>
+        <view class="value">{{result.part}}</view>
+      </view>
+      <view class="result-item">
+        <view class="muted">性质分类</view>
+        <view class="value">{{result.nature}}</view>
+      </view>
+      <view class="result-item">
+        <view class="muted">推荐队列</view>
+        <view class="value">{{result.department}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">结构化问诊摘要</view>
+    <view class="summary">{{result.summary}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">医生端标签</view>
+    <text class="tag">{{result.part}}</text>
+    <text class="tag">{{result.nature}}</text>
+    <text class="tag">{{result.risk.level}}</text>
+    <text class="tag">{{result.department}}</text>
+  </view>
+
+  <button class="primary-btn" bindtap="goRecords">查看患者档案</button>
+  <button class="ghost-btn" bindtap="backHome">返回首页</button>
+</view>
+
+<view class="page" wx:else>
+  <view class="card">
+    <view class="section-title">暂无分诊结果</view>
+    <view class="subtitle">请先完成一次疼痛问诊。</view>
+  </view>
+</view>

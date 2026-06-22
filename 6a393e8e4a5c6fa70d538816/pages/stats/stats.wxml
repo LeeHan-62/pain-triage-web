@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="card stats-head">
+    <view class="title">门诊疼痛统计</view>
+    <view class="subtitle">按本地模拟档案统计疼痛就诊结构，为社区全科门诊提供科研辅助数据雏形。</view>
+    <view class="number">{{total}}</view>
+    <view class="muted">累计问诊记录</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">高危疼痛筛查</view>
+    <view class="metric">
+      <view>
+        <view class="metric-num">{{highRiskCount}}</view>
+        <view class="muted">Ⅰ级 / Ⅱ级患者数量</view>
+      </view>
+      <view class="metric-note">用于统计胸痛高危、急腹症疑似、突发剧烈疼痛等预警患者。</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">风险等级分布</view>
+    <view class="bar-row" wx:for="{{riskList}}" wx:key="name">
+      <view class="bar-label">{{item.name}}</view>
+      <view class="bar-track"><view class="bar-fill" style="width: {{total ? item.count * 100 / total : 0}}%;"></view></view>
+      <view class="bar-count">{{item.count}}</view>
+    </view>
+    <view class="subtitle" wx:if="{{!riskList.length}}">暂无统计数据。</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">疼痛部位占比</view>
+    <view class="bar-row" wx:for="{{partList}}" wx:key="name">
+      <view class="bar-label">{{item.name}}</view>
+      <view class="bar-track"><view class="bar-fill part" style="width: {{total ? item.count * 100 / total : 0}}%;"></view></view>
+      <view class="bar-count">{{item.count}}</view>
+    </view>
+    <view class="subtitle" wx:if="{{!partList.length}}">完成问诊后自动生成部位统计。</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">疼痛性质分布</view>
+    <view class="bar-row" wx:for="{{natureList}}" wx:key="name">
+      <view class="bar-label">{{item.name}}</view>
+      <view class="bar-track"><view class="bar-fill nature" style="width: {{total ? item.count * 100 / total : 0}}%;"></view></view>
+      <view class="bar-count">{{item.count}}</view>
+    </view>
+    <view class="subtitle" wx:if="{{!natureList.length}}">完成问诊后自动生成性质统计。</view>
+  </view>
+</view>

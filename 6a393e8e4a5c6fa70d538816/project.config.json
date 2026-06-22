@@ -1,0 +1,15 @@
+{
+  "description": "疼痛智能分诊微信小程序原型",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.7.0",
+  "appid": "touristappid",
+  "projectname": "pain-triage-miniprogram",
+  "condition": {}
+}

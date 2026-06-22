@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>疼痛问诊采集</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>疼痛问诊采集</h1>
+    <p>请根据您的实际情况填写以下信息</p>
+  </div>
+
+  <div class="container">
+    <a href="index.html" class="nav-back">返回首页</a>
+
+    <form id="consultForm">
+      <div class="card">
+        <div class="card-title">1. 疼痛位置</div>
+        <div class="form-hint">请选择疼痛发生的主要部位</div>
+        <div class="options-grid" id="locationOptions">
+          <button type="button" class="option-btn" data-value="头">头</button>
+          <button type="button" class="option-btn" data-value="胸">胸</button>
+          <button type="button" class="option-btn" data-value="腹">腹</button>
+          <button type="button" class="option-btn" data-value="腰背">腰背</button>
+          <button type="button" class="option-btn" data-value="四肢关节">四肢关节</button>
+          <button type="button" class="option-btn" data-value="全身">全身</button>
+        </div>
+        <input type="hidden" name="location" id="locationInput">
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. 疼痛性质</div>
+        <div class="form-hint">请选择最符合您疼痛感觉的选项</div>
+        <div class="options-grid" id="natureOptions">
+          <button type="button" class="option-btn" data-value="刺痛">刺痛</button>
+          <button type="button" class="option-btn" data-value="绞痛">绞痛</button>
+          <button type="button" class="option-btn" data-value="烧灼痛">烧灼痛</button>
+          <button type="button" class="option-btn" data-value="撕裂痛">撕裂痛</button>
+          <button type="button" class="option-btn" data-value="钝痛">钝痛</button>
+          <button type="button" class="option-btn" data-value="酸痛">酸痛</button>
+        </div>
+        <input type="hidden" name="nature" id="natureInput">
+      </div>
+
+      <div class="card">
+        <div class="card-title">3. 疼痛时长</div>
+        <div class="form-hint">请选择疼痛持续的时间</div>
+        <div class="options-grid" id="durationOptions">
+          <button type="button" class="option-btn" data-value="突发几小时">突发几小时</button>
+          <button type="button" class="option-btn" data-value="持续数日">持续数日</button>
+          <button type="button" class="option-btn" data-value="慢性反复发作">慢性反复发作</button>
+        </div>
+        <input type="hidden" name="duration" id="durationInput">
+      </div>
+
+      <div class="card">
+        <div class="card-title">4. 诱发/缓解因素</div>
+        <div class="form-hint">请选择与疼痛相关的因素</div>
+        <div class="options-grid" id="factorOptions">
+          <button type="button" class="option-btn" data-value="运动加重">运动加重</button>
+          <button type="button" class="option-btn" data-value="饭后疼痛">饭后疼痛</button>
+          <button type="button" class="option-btn" data-value="休息缓解">休息缓解</button>
+          <button type="button" class="option-btn" data-value="无明显诱因">无明显诱因</button>
+        </div>
+        <input type="hidden" name="factor" id="factorInput">
+      </div>
+
+      <div class="card">
+        <div class="card-title">5. 伴随症状</div>
+        <div class="form-hint">请选择您同时出现的其他症状（可多选）</div>
+        <div class="checkbox-grid" id="symptomsOptions">
+          <label class="checkbox-item">
+            <input type="checkbox" value="胸闷"> 胸闷
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="大汗"> 大汗
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="呕血"> 呕血
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="头晕"> 头晕
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="肢体麻木"> 肢体麻木
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="发热"> 发热
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="呕吐"> 呕吐
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" value="肿胀"> 肿胀
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">6. 疼痛描述</div>
+        <div class="form-hint">请用文字描述您的疼痛情况（可选）</div>
+        <textarea class="form-control" id="description" placeholder="例如：今天早晨突然感到胸口剧烈疼痛，像被撕裂一样，伴有大量出汗..."></textarea>
+        <button type="button" class="btn btn-primary" style="margin-top: 10px; background: var(--text-muted); font-size: 0.9rem;" onclick="fillExample()">
+          语音输入示例
+        </button>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-bottom: 40px;">提交问诊信息</button>
+    </form>
+  </div>
+
+  <script src="js/triage.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    // Single-select options
+    function setupSingleSelect(containerId, inputId) {
+      const container = document.getElementById(containerId);
+      const input = document.getElementById(inputId);
+      container.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          input.value = btn.dataset.value;
+        });
+      });
+    }
+
+    setupSingleSelect('locationOptions', 'locationInput');
+    setupSingleSelect('natureOptions', 'natureInput');
+    setupSingleSelect('durationOptions', 'durationInput');
+    setupSingleSelect('factorOptions', 'factorInput');
+
+    // Checkbox styling
+    document.querySelectorAll('.checkbox-item').forEach(item => {
+      const checkbox = item.querySelector('input[type="checkbox"]');
+      item.addEventListener('click', (e) => {
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+        }
+        item.classList.toggle('checked', checkbox.checked);
+      });
+    });
+
+    function fillExample() {
+      document.getElementById('description').value = '今天早晨突然感到胸口剧烈疼痛，像被撕裂一样，伴有大量出汗，疼痛持续不缓解。';
+    }
+
+    document.getElementById('consultForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const location = document.getElementById('locationInput').value;
+      const nature = document.getElementById('natureInput').value;
+      const duration = document.getElementById('durationInput').value;
+      const factor = document.getElementById('factorInput').value;
+      const symptoms = Array.from(document.querySelectorAll('#symptomsOptions input:checked')).map(cb => cb.value);
+      const description = document.getElementById('description').value;
+
+      if (!location || !nature || !duration) {
+        alert('请至少填写疼痛位置、性质和时长');
+        return;
+      }
+
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = '正在调用模型分析...';
+
+      const formData = { location, nature, duration, factor, symptoms, description };
+      const aiResponse = await smartTriage(formData);
+
+      const record = {
+        formData,
+        result: aiResponse.result,
+        warnings: aiResponse.warnings,
+        backendUsed: aiResponse.backendUsed
+      };
+      saveRecord(record);
+
+      // Pass result to result page via URL
+      const params = new URLSearchParams();
+      params.set('data', JSON.stringify(record));
+      window.location.href = 'result.html?' + params.toString();
+    });
+  </script>
+</body>
+</html>

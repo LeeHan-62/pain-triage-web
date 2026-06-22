@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后台统计</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>后台统计</h1>
+    <p>疼痛问诊数据分析</p>
+  </div>
+
+  <div class="container">
+    <a href="index.html" class="nav-back">返回首页</a>
+
+    <div id="statsContainer"></div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script>
+    const COLORS = ['#2b6cb0', '#38a169', '#d69e2e', '#e53e3e', '#805ad5', '#319795', '#dd6b20', '#718096'];
+
+    function renderPieChart(data, title) {
+      const entries = Object.entries(data);
+      if (entries.length === 0) return '';
+
+      const total = entries.reduce((sum, [, v]) => sum + v, 0);
+      let currentAngle = -90;
+      let svgPaths = '';
+      let legendHtml = '';
+
+      entries.forEach(([key, value], i) => {
+        const percentage = value / total;
+        const angle = percentage * 360;
+        const color = COLORS[i % COLORS.length];
+
+        const x1 = 90 + 80 * Math.cos(currentAngle * Math.PI / 180);
+        const y1 = 90 + 80 * Math.sin(currentAngle * Math.PI / 180);
+        const x2 = 90 + 80 * Math.cos((currentAngle + angle) * Math.PI / 180);
+        const y2 = 90 + 80 * Math.sin((currentAngle + angle) * Math.PI / 180);
+        const largeArc = angle > 180 ? 1 : 0;
+
+        svgPaths += `<path d="M 90 90 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z" fill="${color}" stroke="white" stroke-width="2"/>`;
+        legendHtml += `
+          <div class="legend-item">
+            <span class="legend-color" style="background: ${color}"></span>
+            <span>${key} (${value})</span>
+          </div>
+        `;
+
+        currentAngle += angle;
+      });
+
+      return `
+        <div class="card">
+          <div class="card-title">${title}</div>
+          <div class="pie-chart">
+            <div class="pie-container">
+              <svg viewBox="0 0 180 180" width="100%" height="100%">
+                ${svgPaths}
+                <circle cx="90" cy="90" r="40" fill="white"/>
+                <text x="90" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a202c">${total}</text>
+                <text x="90" y="102" text-anchor="middle" font-size="10" fill="#718096">总计</text>
+              </svg>
+            </div>
+            <div class="pie-legend">${legendHtml}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBarChart(data, title) {
+      const entries = Object.entries(data);
+      if (entries.length === 0) return '';
+
+      const max = Math.max(...entries.map(([, v]) => v));
+
+      let barsHtml = '';
+      entries.forEach(([key, value], i) => {
+        const width = max > 0 ? (value / max * 100) : 0;
+        const color = COLORS[i % COLORS.length];
+        barsHtml += `
+          <div class="bar-item">
+            <div class="bar-label">${key}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: ${width}%; background: ${color};"></div>
+            </div>
+            <div class="bar-value">${value}</div>
+          </div>
+        `;
+      });
+
+      return `
+        <div class="card">
+          <div class="card-title">${title}</div>
+          <div class="bar-chart">${barsHtml}</div>
+        </div>
+      `;
+    }
+
+    function renderStats() {
+      const stats = getStats();
+      const container = document.getElementById('statsContainer');
+
+      if (stats.total === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>暂无统计数据</p>
+            <a href="consult.html" class="btn btn-primary">开始首次问诊</a>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">${stats.total}</div>
+            <div class="stat-label">总问诊数</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${Object.keys(stats.byLocation).length}</div>
+            <div class="stat-label">疼痛部位种类</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${Object.keys(stats.byRisk).length}</div>
+            <div class="stat-label">风险等级分布</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${Object.keys(stats.byDepartment).length}</div>
+            <div class="stat-label">涉及科室数</div>
+          </div>
+        </div>
+      `;
+
+      html += renderBarChart(stats.byLocation, '疼痛部位分布');
+      html += renderPieChart(stats.byRisk, '风险等级占比');
+      html += renderBarChart(stats.byDepartment, '科室分流统计');
+
+      container.innerHTML = html;
+    }
+
+    renderStats();
+  </script>
+</body>
+</html>

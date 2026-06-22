@@ -1,0 +1,76 @@
+.stats-head {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.stats-head .subtitle,
+.stats-head .muted {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.number {
+  margin-top: 28rpx;
+  font-size: 72rpx;
+  font-weight: 800;
+}
+
+.metric {
+  display: flex;
+  gap: 24rpx;
+  align-items: center;
+}
+
+.metric-num {
+  color: #d93025;
+  font-size: 60rpx;
+  font-weight: 800;
+}
+
+.metric-note {
+  flex: 1;
+  color: #334155;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 150rpx 1fr 48rpx;
+  gap: 14rpx;
+  align-items: center;
+  margin: 18rpx 0;
+}
+
+.bar-label {
+  color: #334155;
+  font-size: 26rpx;
+}
+
+.bar-track {
+  height: 20rpx;
+  background: #e2e8f0;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  min-width: 8rpx;
+  background: #1f6feb;
+  border-radius: 999rpx;
+}
+
+.bar-fill.part {
+  background: #16a34a;
+}
+
+.bar-fill.nature {
+  background: #f97316;
+}
+
+.bar-count {
+  color: #17233d;
+  font-size: 26rpx;
+  font-weight: 700;
+  text-align: right;
+}

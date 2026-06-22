@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/consult/consult",
+    "pages/result/result",
+    "pages/records/records",
+    "pages/stats/stats"
+  ],
+  "window": {
+    "navigationBarTitleText": "疼痛智能分诊",
+    "navigationBarBackgroundColor": "#1f6feb",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f4f7fb"
+  },
+  "tabBar": {
+    "color": "#7b8794",
+    "selectedColor": "#1f6feb",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "问诊"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "档案"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

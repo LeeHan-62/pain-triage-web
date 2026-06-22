@@ -1,0 +1,36 @@
+.record-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18rpx;
+}
+
+.patient {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.time {
+  margin-top: 8rpx;
+  color: #64748b;
+  font-size: 24rpx;
+}
+
+.level {
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.summary {
+  color: #334155;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.tags {
+  margin-top: 18rpx;
+}
+
+.empty {
+  text-align: center;
+}

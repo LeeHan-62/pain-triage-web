@@ -1,0 +1,56 @@
+<view class="page">
+  <view class="card">
+    <view class="section-title">患者基本信息</view>
+    <input class="input" placeholder="患者姓名，可不填" value="{{form.patientName}}" data-field="patientName" bindinput="onInput" />
+  </view>
+
+  <view class="card">
+    <view class="section-title">AI 引导式疼痛问诊</view>
+
+    <view class="field">
+      <view class="label">疼痛位置</view>
+      <picker mode="selector" range="{{locations}}" data-field="location" data-list="locations" bindchange="onPickerChange">
+        <view class="picker">{{form.location || '请选择：头 / 胸 / 腹 / 腰背部 / 四肢关节 / 全身'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">疼痛性质</view>
+      <picker mode="selector" range="{{natures}}" data-field="nature" data-list="natures" bindchange="onPickerChange">
+        <view class="picker">{{form.nature || '请选择：刺痛、绞痛、烧灼痛、撕裂痛、钝痛、酸痛'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">疼痛时长</view>
+      <picker mode="selector" range="{{durations}}" data-field="duration" data-list="durations" bindchange="onPickerChange">
+        <view class="picker">{{form.duration || '请选择疼痛持续时间'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">诱发或缓解因素</view>
+      <picker mode="selector" range="{{factors}}" data-field="factor" data-list="factors" bindchange="onPickerChange">
+        <view class="picker">{{form.factor || '请选择运动、进食、休息等相关因素'}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">伴随症状</view>
+    <checkbox-group bindchange="onSymptomsChange">
+      <label class="check-item" wx:for="{{symptoms}}" wx:key="*this">
+        <checkbox value="{{item}}" color="#1f6feb" />
+        <text>{{item}}</text>
+      </label>
+    </checkbox-group>
+  </view>
+
+  <view class="card">
+    <view class="section-title">患者语音 / 文字描述</view>
+    <textarea class="textarea" placeholder="请描述疼痛发生时间、部位、性质、伴随症状，例如：胸部压榨样疼痛，伴大汗和胸闷。" value="{{form.description}}" data-field="description" bindinput="onInput" />
+    <button class="ghost-btn" bindtap="useVoiceMock">填入语音识别示例</button>
+  </view>
+
+  <button class="primary-btn" bindtap="submit">提交并生成分诊结果</button>
+</view>

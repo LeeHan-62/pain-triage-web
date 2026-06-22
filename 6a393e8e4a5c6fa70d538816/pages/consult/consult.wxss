@@ -1,0 +1,40 @@
+.input,
+.picker,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #f8fafc;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 18rpx;
+  padding: 22rpx;
+  font-size: 28rpx;
+  color: #17233d;
+}
+
+.field {
+  margin-bottom: 28rpx;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #334155;
+  margin-bottom: 12rpx;
+  font-weight: 600;
+}
+
+.textarea {
+  min-height: 180rpx;
+  line-height: 1.6;
+}
+
+.check-item {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 20rpx 18rpx 0;
+  font-size: 28rpx;
+  color: #334155;
+}
