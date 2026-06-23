@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>健康档案</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>健康档案</h1>
+    <p>历次疼痛问诊记录</p>
+  </div>
+
+  <div class="container">
+    <a href="index.html" class="nav-back">返回首页</a>
+
+    <div id="recordsContainer"></div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script>
+    function renderRecords() {
+      const records = getRecords();
+      const container = document.getElementById('recordsContainer');
+
+      if (records.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>暂无问诊记录</p>
+            <a href="consult.html" class="btn btn-primary">开始首次问诊</a>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `<div class="card"><div class="card-title">共 ${records.length} 条记录</div></div>`;
+
+      records.forEach(r => {
+        const risk = r.result?.risk;
+        const riskBadge = risk ? `<span class="risk-badge ${risk.color}">${risk.level}</span>` : '';
+        html += `
+          <div class="record-item">
+            <div class="record-header">
+              <span class="record-date">${r.date}</span>
+              ${riskBadge}
+            </div>
+            <div class="record-body">
+              <p><strong>部位：</strong>${r.result?.location || '未分类'} &nbsp;|&nbsp; <strong>性质：</strong>${r.result?.nature || '未分类'}</p>
+              <p><strong>建议：</strong>${risk?.desc || '无'} &nbsp;|&nbsp; <strong>科室：</strong>${r.result?.department || '未分配'}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    renderRecords();
+  </script>
+</body>
+</html>

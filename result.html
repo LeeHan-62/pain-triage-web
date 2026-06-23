@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分诊结果</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>AI 分诊结果</h1>
+    <p>基于您提供的信息生成的智能分诊报告</p>
+  </div>
+
+  <div class="container">
+    <a href="index.html" class="nav-back">返回首页</a>
+
+    <div id="resultContainer"></div>
+
+    <div class="btn-group" style="margin-top: 20px;">
+      <a href="consult.html" class="btn btn-primary btn-block">重新问诊</a>
+      <a href="records.html" class="btn btn-primary btn-block" style="background: var(--success);">查看健康档案</a>
+    </div>
+  </div>
+
+  <script>
+    function renderResult() {
+      const params = new URLSearchParams(window.location.search);
+      const dataStr = params.get('data');
+      if (!dataStr) {
+        document.getElementById('resultContainer').innerHTML = '<div class="empty-state"><p>暂无分诊数据</p><a href="consult.html" class="btn btn-primary">去问诊</a></div>';
+        return;
+      }
+
+      const record = JSON.parse(decodeURIComponent(dataStr));
+      const r = record.result;
+      const f = record.formData;
+      const warningsHtml = (record.warnings || []).map(item => `<div class="alert alert-warning">${item}</div>`).join('');
+      const modelSources = r.model_sources || {};
+      const emotion = r.emotion || {};
+
+      const alertClass = r.risk.level === 'Ⅰ级' ? 'alert-danger' :
+                         r.risk.level === 'Ⅱ级' ? 'alert-warning' :
+                         r.risk.level === 'Ⅲ级' ? 'alert-info' : 'alert-success';
+
+      const html = `
+        ${warningsHtml}
+        <div class="alert ${alertClass}">
+          <strong>风险等级：${r.risk.level}（${r.risk.label}）</strong><br>
+          ${r.risk.desc}
+        </div>
+
+        <div class="card">
+          <div class="card-title">AI 结构化摘要</div>
+          <p style="line-height: 1.8;">${r.summary}</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">分诊详情</div>
+
+          <div class="result-section">
+            <div class="result-label">疼痛部位分类</div>
+            <div class="result-value">${r.location}</div>
+          </div>
+
+          <div class="result-section">
+            <div class="result-label">疼痛性质分类</div>
+            <div class="result-value">${r.nature}</div>
+          </div>
+
+          <div class="result-section">
+            <div class="result-label">风险等级</div>
+            <div class="result-value">
+              <span class="risk-badge ${r.risk.color}">${r.risk.level} ${r.risk.label}</span>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <div class="result-label">分诊建议</div>
+            <div class="result-value">${r.risk.desc}</div>
+          </div>
+
+          <div class="result-section">
+            <div class="result-label">推荐科室</div>
+            <div class="result-value">${r.department}</div>
+          </div>
+
+          <div class="result-section">
+            <div class="result-label">患者痛苦情绪强度</div>
+            <div class="result-value">${emotion.label || '未分析'}${emotion.score !== undefined ? `（${Math.round(emotion.score * 100)}分）` : ''}</div>
+          </div>
+
+          <div class="result-section">
+            <div class="result-label">OpenEMR 档案写入</div>
+            <div class="result-value">${r.saved_to_openemr ? '已写入 OpenEMR' : '未写入，当前保存在浏览器本地档案'}</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">模型接入状态</div>
+          <div class="result-section">
+            <div class="result-label">FastChat 问诊结构化</div>
+            <div class="result-value">${modelSources.fastchat || '未启用'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">MONAI 多分类</div>
+            <div class="result-value">${modelSources.monai || '未启用'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">KoBERT-Emotion 情绪分类</div>
+            <div class="result-value">${modelSources.kobert_emotion || '未启用'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">OpenEMR 健康档案</div>
+            <div class="result-value">${modelSources.openemr || '未启用'}</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">原始问诊信息</div>
+          <div class="result-section">
+            <div class="result-label">疼痛位置</div>
+            <div class="result-value">${f.location || '未填写'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">疼痛性质</div>
+            <div class="result-value">${f.nature || '未填写'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">疼痛时长</div>
+            <div class="result-value">${f.duration || '未填写'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">诱发/缓解因素</div>
+            <div class="result-value">${f.factor || '未填写'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">伴随症状</div>
+            <div class="result-value">${f.symptoms?.join('、') || '无'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-label">文字描述</div>
+            <div class="result-value">${f.description || '无'}</div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('resultContainer').innerHTML = html;
+    }
+
+    renderResult();
+  </script>
+</body>
+</html>
